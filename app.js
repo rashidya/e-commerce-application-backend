@@ -3,7 +3,11 @@ const mongoose = require('mongoose')
 const app = express();
 const port = 4000;
 
-const products = require('./routes/products')
+const items = require('./routes/items')
+const customer = require('./routes/customer')
+const sales = require('./routes/sales')
+const supplier = require('./routes/supplier')
+const user = require('./routes/user')
 
 
 const url = 'mongodb://127.0.0.1/e-commerce-application-schema'
@@ -21,7 +25,11 @@ con.on("open", () => {
 })
 
 app.use(express.json())
-app.use('/products',  products)
+app.use('/item',  items)
+app.use('/customer',  customer)
+app.use('/supplier',  supplier)
+app.use('/sales',  sales)
+app.use('/user',  user)
 
 // Start the server
 app.listen(port, () => {
