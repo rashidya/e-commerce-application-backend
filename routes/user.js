@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 const User = require('../schema/user.schema');
 const router = express.Router();
 
-const secretKey = 'your-secret-key'; 
-const tokenExpiration = '1d';
+const secretKey = process.env.SECRET_KEY;
+const tokenExpiration = process.env.TOKEN_EXPIRATION;
 
 // GET all users
 router.get('/',authenticateToken, async (req, res) => {
