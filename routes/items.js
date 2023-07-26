@@ -1,8 +1,9 @@
 const express = require("express");
 const Item = require("../schema/item.schema");
+
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", authenticateToken,async (req, res) => {
     Item.find()
     .then((items) => {
       res.json(items);

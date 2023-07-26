@@ -2,7 +2,7 @@ const express = require("express");
 const Customer = require("../schema/customer.schema");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", authenticateToken,async (req, res) => {
   Customer.find()
     .then((customers) => {
       res.json(customers);
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
     });
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",authenticateToken, async (req, res) => {
   const id = req.params.id;
   Customer.findByIdAndUpdate(id, req.body, { new: true })
     .then((updatedCustomer) => {
@@ -41,7 +41,7 @@ router.put("/:id", async (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id",authenticateToken, (req, res) => {
   const id = req.params.id;
   Customer.deleteOne({ _id: id })
     .then((result) => {

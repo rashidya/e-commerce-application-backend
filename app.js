@@ -25,10 +25,10 @@ con.on("open", () => {
 })
 
 app.use(express.json())
-app.use('/item',  items)
+app.use('/item',authenticateToken,  items)
 app.use('/customer',  customer)
-app.use('/supplier',  supplier)
-app.use('/sales',  sales)
+app.use('/supplier',authenticateToken,  supplier)
+app.use('/sales',authenticateToken,  sales)
 app.use('/user',  user)
 
 // Start the server
