@@ -1,6 +1,7 @@
 const express = require("express");
 const Customer = require("../schema/customer.schema");
 const router = express.Router();
+const {authenticateToken}=require('../middleware/authenticateToken')
 
 router.get("/", authenticateToken,async (req, res) => {
   Customer.find()

@@ -3,7 +3,7 @@ const Item = require("../schema/item.schema");
 
 const router = express.Router();
 
-router.get("/", authenticateToken,async (req, res) => {
+router.get("/",async (req, res) => {
     Item.find()
     .then((items) => {
       res.json(items);

@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const app = express();
 const port = 4000;
 
+const {authenticateToken}=require('./middleware/authenticateToken')
+
 const items = require('./routes/items')
 const customer = require('./routes/customer')
 const sales = require('./routes/sales')

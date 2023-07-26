@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../schema/user.schema');
 const router = express.Router();
+const {authenticateToken}=require('../middleware/authenticateToken')
 
 const secretKey = process.env.SECRET_KEY;
 const tokenExpiration = process.env.TOKEN_EXPIRATION;
