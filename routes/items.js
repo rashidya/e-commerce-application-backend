@@ -13,26 +13,22 @@ router.get("/",async (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
-  const newItem = new Item({
-    name: req.body.name,
-    description: req.body.description,
-    qty_on_hand: req.body.qty_on_hand,
-    unit_price: req.body.unit_price,
-  });
+// POST create a new user
+router.post('/', async (req, res) => {
+  const newItem = new Item(req.body);
 
-  newItem
-    .save()
+  newItem.save()
     .then((item) => {
       res.send(item);
     })
     .catch((err) => {
-      res.send("Error : " + err);
+      res.send('Error: ' + err);
     });
 });
 
-router.put("/", async (req, res) => {
-    Item.findByIdAndUpdate(req.body.id, req.body.data, { new: true })
+router.put("/:id", async (req, res) => {
+  const id = req.params.id;
+    Item.findByIdAndUpdate(id, req.body, { new: true })
     .then((updatedItem) => {
       res.json(updatedItem);
     })

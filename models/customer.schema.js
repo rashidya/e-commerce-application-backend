@@ -8,6 +8,10 @@ const customerSchema = new mongoose.Schema({
   email: String,
   phone: String,
   address: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
-const Customer = mongoose.model('Customer', customerSchema);
+module.exports = mongoose.model('Customer', customerSchema);

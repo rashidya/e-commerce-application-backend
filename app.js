@@ -29,10 +29,10 @@ con.on("open", () => {
 })
 app.use(cors())
 app.use(express.json())
-app.use('/item',authenticateToken,  items)
+app.use('/item',  items)
 app.use('/customer',  customer)
-app.use('/supplier',authenticateToken,  supplier)
-app.use('/sales',authenticateToken,  sales)
+app.use('/supplier',  supplier)
+app.use('/sales',  sales)
 app.use('/user',  user)
 app.use('/auth',  auth)
 

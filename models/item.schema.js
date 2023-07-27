@@ -20,18 +20,18 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  cost: {
-    type: Number,
-    required: true,
-  },
+  // cost: {
+  //   type: Number,
+  //   required: true,
+  // },
   quantityInStock: {
     type: Number,
     default: 0,
   },
-  supplier: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Supplier',
-  },
+  // supplier: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Supplier',
+  // },
 });
 
 module.exports  = mongoose.model('Item', itemSchema);

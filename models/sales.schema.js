@@ -6,15 +6,7 @@ const saleSchema = new mongoose.Schema({
     ref: 'Item',
     required: true,
   },
-  customer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Customer',
-  },
   quantitySold: {
-    type: Number,
-    required: true,
-  },
-  totalPrice: {
     type: Number,
     required: true,
   },
@@ -24,4 +16,4 @@ const saleSchema = new mongoose.Schema({
   },
 });
 
-const Sale = mongoose.model('Sale', saleSchema);
+module.exports  = mongoose.model('Sale', saleSchema);

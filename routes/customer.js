@@ -1,10 +1,10 @@
 const express = require("express");
 const Customer = require("../models/customer.schema");
 const router = express.Router();
-const {authenticateToken}=require('../middleware/authenticateToken')
+const { authenticateToken } = require("../middleware/authenticateToken");
 
-router.get("/", authenticateToken,async (req, res) => {
-  Customer.find()
+router.get("/", async (req, res) => {
+  Customer.find().populate("user", "username")
     .then((customers) => {
       res.json(customers);
     })
@@ -14,12 +14,7 @@ router.get("/", authenticateToken,async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const newCustomer = new Customer({
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    address: req.body.address,
-  });
+  const newCustomer = new Customer(req.body);
 
   newCustomer
     .save()
@@ -31,7 +26,7 @@ router.post("/", async (req, res) => {
     });
 });
 
-router.put("/:id",authenticateToken, async (req, res) => {
+router.put("/:id", async (req, res) => {
   const id = req.params.id;
   Customer.findByIdAndUpdate(id, req.body, { new: true })
     .then((updatedCustomer) => {
@@ -42,7 +37,7 @@ router.put("/:id",authenticateToken, async (req, res) => {
     });
 });
 
-router.delete("/:id",authenticateToken, (req, res) => {
+router.delete("/:id", (req, res) => {
   const id = req.params.id;
   Customer.deleteOne({ _id: id })
     .then((result) => {
