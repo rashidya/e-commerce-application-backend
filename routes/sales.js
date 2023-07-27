@@ -1,5 +1,5 @@
 const express = require('express');
-const Sale = require('../schema/sales.schema');
+const Sale = require('../models/sales.schema');
 const router = express.Router();
 
 router.get('/', async (req, res) => {

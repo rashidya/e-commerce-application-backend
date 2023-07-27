@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose')
 const app = express();
 const port = 4000;
+const cors = require('cors');
 
 const {authenticateToken}=require('./middleware/authenticateToken')
 
@@ -10,6 +11,7 @@ const customer = require('./routes/customer')
 const sales = require('./routes/sales')
 const supplier = require('./routes/supplier')
 const user = require('./routes/user')
+const auth = require('./routes/auth')
 
 
 const url = 'mongodb://127.0.0.1/e-commerce-application-schema'
@@ -25,13 +27,14 @@ app.get('/', (req, res) => {
 con.on("open", () => {
     console.log('MongoDB connected!');
 })
-
+app.use(cors())
 app.use(express.json())
 app.use('/item',authenticateToken,  items)
 app.use('/customer',  customer)
 app.use('/supplier',authenticateToken,  supplier)
 app.use('/sales',authenticateToken,  sales)
 app.use('/user',  user)
+app.use('/auth',  auth)
 
 // Start the server
 app.listen(port, () => {

@@ -1,15 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../schema/user.schema');
+const User = require('../models/user.model');
 const router = express.Router();
-const {authenticateToken}=require('../middleware/authenticateToken')
-
-const secretKey = process.env.SECRET_KEY;
-const tokenExpiration = process.env.TOKEN_EXPIRATION;
 
 // GET all users
-router.get('/',authenticateToken, async (req, res) => {
+router.get('/', async (req, res) => {
   User.find()
     .then((users) => {
       res.json(users);
@@ -23,14 +19,13 @@ router.get('/',authenticateToken, async (req, res) => {
 router.post('/', async (req, res) => {
   const newUser = new User({
     username: req.body.username,
-    password: req.body.password,
+    password: await bcrypt.hash(req.body.password,10),
     role: req.body.role || 'user', // Default role is 'user' if not specified
   });
 
-  newUser
-    .save()
-    .then((user) => {
-      res.send(user);
+  newUser.save()
+    .then(() => {
+      res.send("User created succcefully");
     })
     .catch((err) => {
       res.send('Error: ' + err);
@@ -38,11 +33,16 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update user by id
-router.put('/:id',authenticateToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
   const id = req.params.id;
-  User.findByIdAndUpdate(id, req.body, { new: true })
-    .then((updatedUser) => {
-      res.json(updatedUser);
+  const data=req.body
+  if(data.password){
+    data.password=await bcrypt.hash(data.password,10)
+  }
+
+  User.findByIdAndUpdate(id, data, { new: true })
+    .then(() => {
+      res.send("User updated succefully");
     })
     .catch((err) => {
       res.send('Error: ' + err);
@@ -50,7 +50,7 @@ router.put('/:id',authenticateToken, async (req, res) => {
 });
 
 // DELETE user by id
-router.delete('/:id',authenticateToken, (req, res) => {
+router.delete('/:id', (req, res) => {
   const id = req.params.id;
   User.deleteOne({ _id: id })
     .then((result) => {
@@ -65,32 +65,5 @@ router.delete('/:id',authenticateToken, (req, res) => {
     });
 });
 
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // Check if the user exists
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-
-    // Compare passwords
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-
-    // If login is successful, issue a JWT token
-    const token = jwt.sign({ id: user._id, role: user.role }, secretKey, {
-      expiresIn: tokenExpiration,
-    });
-
-    // Return the token as a response
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
 
 module.exports = router;

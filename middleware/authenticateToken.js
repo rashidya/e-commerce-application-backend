@@ -1,3 +1,8 @@
+
+require('dotenv').config();
+
+const secretKey = process.env.SECRET_KEY;
+
 // Middleware to validate the token
 const authenticateToken = (req, res, next) => {
     const token = req.header('Authorization')?.split(' ')[1];

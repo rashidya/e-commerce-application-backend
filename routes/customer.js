@@ -1,5 +1,5 @@
 const express = require("express");
-const Customer = require("../schema/customer.schema");
+const Customer = require("../models/customer.schema");
 const router = express.Router();
 const {authenticateToken}=require('../middleware/authenticateToken')
 
