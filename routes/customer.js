@@ -1,5 +1,6 @@
 const express = require("express");
 const Customer = require("../models/customer.schema");
+const User = require("../models/user.model");
 const router = express.Router();
 const { authenticateToken } = require("../middleware/authenticateToken");
 
@@ -14,16 +15,36 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const newCustomer = new Customer(req.body);
+  const data=req.body
+  const newUser = new User({
+    username: req.body.username,
+    password: await bcrypt.hash(req.body.password,10),
+    role: req.body.role || 'user', // Default role is 'user' if not specified
+  });
 
-  newCustomer
+  newUser
     .save()
-    .then((customer) => {
-      res.send(customer);
+    .then((user) => {
+      const newCustomer = new Customer({
+        name:data.name,
+        address:data.address,
+        phone:data.phoneNumber,
+        user:user._id
+      });
+    
+      newCustomer
+        .save()
+        .then((customer) => {
+          res.send(customer);
+        })
+        .catch((err) => {
+          res.send("Error: " + err);
+        });
     })
     .catch((err) => {
       res.send("Error: " + err);
     });
+  
 });
 
 router.put("/:id", async (req, res) => {

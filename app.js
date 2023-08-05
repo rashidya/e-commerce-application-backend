@@ -9,7 +9,6 @@ const {authenticateToken}=require('./middleware/authenticateToken')
 const items = require('./routes/items')
 const customer = require('./routes/customer')
 const sales = require('./routes/sales')
-const supplier = require('./routes/supplier')
 const user = require('./routes/user')
 const auth = require('./routes/auth')
 
@@ -27,11 +26,15 @@ app.get('/', (req, res) => {
 con.on("open", () => {
     console.log('MongoDB connected!');
 })
-app.use(cors())
+// Use the cors middleware
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  credentials: true, // Allow credentials (cookies, authorization headers)
+}));
+
 app.use(express.json())
 app.use('/item',  items)
 app.use('/customer',  customer)
-app.use('/supplier',  supplier)
 app.use('/sales',  sales)
 app.use('/user',  user)
 app.use('/auth',  auth)

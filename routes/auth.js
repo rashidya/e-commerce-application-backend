@@ -26,13 +26,34 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
+ 
+
+    // const acessToken = jwt.sign(payload, accessKey, {
+    //     expiresIn: '5m',
+    // })
+    // const refreshToken = jwt.sign(payload, refreshKey, {
+    //     expiresIn: '24h',
+    // })
+
+    // res.cookie('accessToken', acessToken, {
+    //     maxAge: 1000 * 60 * 5,
+    //     httpOnly: true,
+    // })
+    // res.cookie('refreshToken', refreshToken, {
+    //     maxAge: 60 * 60 * 24 * 1000,
+    //     httpOnly: true,
+    // })
+
+    // res.status(200).send({ auth: true })
+
     // If login is successful, issue a JWT token
     const token = jwt.sign({ id: user._id, role: user.role }, secretKey, {
       expiresIn: tokenExpiration,
     });
 
     // Return the token as a response
-    res.json({ token });
+    res.cookie('accessToken', token, { httpOnly: true});
+    res.status(200).send({ user })
   } catch (error) {
     res.status(500).json({message:'Internal Server Error'});
   }
